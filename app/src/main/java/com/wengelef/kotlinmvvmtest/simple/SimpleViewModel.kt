@@ -2,13 +2,13 @@ package com.wengelef.kotlinmvvmtest.simple
 
 import android.databinding.Bindable
 import com.wengelef.kotlinmvvmtest.BR
-import com.wengelef.kotlinmvvmtest.LcecViewModel
+import com.wengelef.kotlinmvvmtest.LceViewModel
+import com.wengelef.kotlinmvvmtest.advanced.Response
 import com.wengelef.kotlinmvvmtest.model.User
 import com.wengelef.kotlinmvvmtest.rest.repo.UserRepository
-import com.wengelef.kotlinmvvmtest.util.networkErrorHandler
 import javax.inject.Inject
 
-class SimpleViewModel @Inject constructor(private val userRepository: UserRepository) : LcecViewModel<User>() {
+class SimpleViewModel @Inject constructor(private val userRepository: UserRepository) : LceViewModel<User>() {
 
     private var user: User? = null
 
@@ -49,9 +49,7 @@ class SimpleViewModel @Inject constructor(private val userRepository: UserReposi
     fun loadData() {
         onLoading()
         userRepository.getData()
-                .subscribe(
-                        { onContent(it[0]) },
-                        { error: Throwable -> networkErrorHandler(error, { onError() }) })
+                .subscribe{ when (it) { is Response.Success -> onContent(it.data[0]) } }
     }
 
     @Bindable fun getError(): Boolean = error

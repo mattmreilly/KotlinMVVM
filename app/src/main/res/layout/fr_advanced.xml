@@ -15,12 +15,11 @@
         android:background="@android:color/white"
         android:clickable="true">
 
-        <ProgressBar
-            app:showProgress="@{viewModel.loading}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:layout_gravity="center"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dataSetChanged="@{viewModel.users}" />
 
         <TextView
             android:text="@{viewModel.errorMessage}"
@@ -34,17 +33,19 @@
             android:background="@android:color/background_dark"
             android:visibility="@{viewModel.error ? View.VISIBLE : View.GONE}" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:dataSetChanged="@{viewModel.users}"/>
+        <ProgressBar
+            app:showProgress="@{viewModel.loading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:layout_gravity="center"/>
 
         <Button
             android:text="Reload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:enabled="@{viewModel.reloadButtonEnabled}"
             android:onClick="@{() -> viewModel.loadData()}"/>
     </FrameLayout>
 </layout>

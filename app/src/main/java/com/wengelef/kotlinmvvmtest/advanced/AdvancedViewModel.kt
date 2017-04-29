@@ -4,12 +4,11 @@ import android.databinding.Bindable
 import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import com.wengelef.kotlinmvvmtest.BR
-import com.wengelef.kotlinmvvmtest.LcecViewModel
+import com.wengelef.kotlinmvvmtest.LceViewModel
 import com.wengelef.kotlinmvvmtest.model.User
 import com.wengelef.kotlinmvvmtest.rest.repo.UserRepository
 import com.wengelef.kotlinmvvmtest.util.ConnectionObserver
-import com.wengelef.kotlinmvvmtest.util.networkErrorHandler
-import timber.log.Timber
+import rx.subjects.PublishSubject
 import javax.inject.Inject
 
 @BindingAdapter("dataSetChanged")
@@ -21,7 +20,9 @@ fun onDataSetChange(recycler: RecyclerView, users: List<User>?) {
 
 class AdvancedViewModel @Inject constructor(
         private val userRepository: UserRepository,
-        connectionObserver: ConnectionObserver) : LcecViewModel<List<User>>() {
+        connectionObserver: ConnectionObserver) : LceViewModel<List<User>>() {
+
+    private val viewStates = PublishSubject.create<State<AdvancedViewState>>()
 
     private var users: List<User>? = null
     private var loading = false
@@ -30,9 +31,19 @@ class AdvancedViewModel @Inject constructor(
     private var connected = true
 
     init {
-        loadData()
+        viewStates.subscribe {
+            when (it) {
+                is AdvancedViewState.Loading -> onLoading()
+                is AdvancedViewState.Success -> onContent(it.users)
+                is AdvancedViewState.Error -> onError(it.message)
+                is AdvancedViewState.Connection -> onConnectivity(it.connected)
+            }
+        }
+
         connectionObserver.networkChanges()
-                .subscribe { onConnectivity(it) }
+                .subscribe { viewStates.onNext(AdvancedViewState.Connection(it)) }
+
+        loadData()
     }
 
     override fun onContent(content: List<User>) {
@@ -47,6 +58,7 @@ class AdvancedViewModel @Inject constructor(
         error = false
         notifyPropertyChanged(BR.loading)
         notifyPropertyChanged(BR.error)
+        notifyPropertyChanged(BR.reloadButtonEnabled)
     }
 
     override fun onError(message: String) {
@@ -60,21 +72,25 @@ class AdvancedViewModel @Inject constructor(
 
     override fun onConnectivity(connected: Boolean) {
         this.connected = connected
-        notifyPropertyChanged(BR.connected)
+        notifyPropertyChanged(BR.reloadButtonEnabled)
     }
 
     fun loadData() {
-        onLoading()
-        userRepository.getData({ onError("Network Error") })
-                .subscribe(
-                        { onContent(it) },
-                        { error: Throwable -> networkErrorHandler(error, { onError() }) })
+        viewStates.onNext(AdvancedViewState.Loading())
+
+        userRepository.getData()
+                .subscribe {
+                    viewStates.onNext(when (it) {
+                        is Response.Success -> AdvancedViewState.Success(it.data)
+                        is Response.Failure -> AdvancedViewState.Error(it.reason)
+                    })
+                }
     }
 
     @Bindable fun getError(): Boolean = error
     @Bindable fun getErrorMessage(): String = errorMsg
     @Bindable fun getLoading(): Boolean = loading
-    @Bindable fun getConnected(): Boolean = connected
+    @Bindable fun getReloadButtonEnabled(): Boolean = connected && !loading
 
     fun getUsers(): List<User>? = users
 }

@@ -11,8 +11,6 @@ import com.wengelef.kotlinmvvmtest.databinding.AcMainBinding
 import com.wengelef.kotlinmvvmtest.extension.show
 import com.wengelef.kotlinmvvmtest.simple.SimpleFragment
 import com.wengelef.kotlinmvvmtest.util.ConnectionObserver
-import kotlinx.android.synthetic.main.ac_main.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
