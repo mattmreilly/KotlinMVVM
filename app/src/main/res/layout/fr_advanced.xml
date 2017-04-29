@@ -19,7 +19,8 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:dataSetChanged="@{viewModel.users}" />
+            app:dataSetChanged="@{viewModel.users}"
+            app:userClicks="@{viewModel.userClicks}"/>
 
         <TextView
             android:text="@{viewModel.errorMessage}"

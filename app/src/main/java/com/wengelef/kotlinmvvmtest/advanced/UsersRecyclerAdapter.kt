@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import com.wengelef.kotlinmvvmtest.BR
 import com.wengelef.kotlinmvvmtest.R
 import com.wengelef.kotlinmvvmtest.model.User
+import rx.subjects.PublishSubject
 
-class UsersRecyclerAdapter(private val users: List<User>) : RecyclerView.Adapter<UsersRecyclerAdapter.UserItemViewHolder>() {
+class UsersRecyclerAdapter(private val users: List<User>, private val userClicks: PublishSubject<User>) : RecyclerView.Adapter<UsersRecyclerAdapter.UserItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserItemViewHolder {
         val viewDatabinding: ViewDataBinding =
@@ -18,7 +19,7 @@ class UsersRecyclerAdapter(private val users: List<User>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: UserItemViewHolder, position: Int) {
-        holder.viewDataBinding.setVariable(BR.user, UserItemViewModel(users[position]))
+        holder.viewDataBinding.setVariable(BR.user, UserItemViewModel(users[position], userClicks))
     }
 
     override fun getItemCount(): Int = users.size

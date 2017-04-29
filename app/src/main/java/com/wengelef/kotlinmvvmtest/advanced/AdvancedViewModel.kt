@@ -9,12 +9,13 @@ import com.wengelef.kotlinmvvmtest.model.User
 import com.wengelef.kotlinmvvmtest.rest.repo.UserRepository
 import com.wengelef.kotlinmvvmtest.util.ConnectionObserver
 import rx.subjects.PublishSubject
+import timber.log.Timber
 import javax.inject.Inject
 
-@BindingAdapter("dataSetChanged")
-fun onDataSetChange(recycler: RecyclerView, users: List<User>?) {
+@BindingAdapter("dataSetChanged", "userClicks")
+fun onDataSetChange(recycler: RecyclerView, users: List<User>?, userClicks: PublishSubject<User>) {
     if (users != null) {
-        recycler.adapter = UsersRecyclerAdapter(users)
+        recycler.adapter = UsersRecyclerAdapter(users, userClicks)
     }
 }
 
@@ -25,6 +26,8 @@ class AdvancedViewModel @Inject constructor(
     private val viewStates = PublishSubject.create<State<AdvancedViewState>>()
 
     private var users: List<User>? = null
+    private val userClicks: PublishSubject<User> = PublishSubject.create()
+
     private var loading = false
     private var error = false
     private var errorMsg = ""
@@ -44,6 +47,8 @@ class AdvancedViewModel @Inject constructor(
                 .subscribe { viewStates.onNext(AdvancedViewState.Connection(it)) }
 
         loadData()
+
+        userClicks.subscribe { Timber.i("User clicked ${it.login}") }
     }
 
     override fun onContent(content: List<User>) {
@@ -93,4 +98,5 @@ class AdvancedViewModel @Inject constructor(
     @Bindable fun getReloadButtonEnabled(): Boolean = connected && !loading
 
     fun getUsers(): List<User>? = users
+    fun getUserClicks(): PublishSubject<User> = userClicks
 }
