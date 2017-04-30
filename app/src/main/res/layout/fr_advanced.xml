@@ -8,7 +8,8 @@
         <import type="android.view.View"/>
     </data>
 
-    <FrameLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,5 +49,5 @@
             android:layout_gravity="bottom"
             android:enabled="@{viewModel.reloadButtonEnabled}"
             android:onClick="@{() -> viewModel.loadData()}"/>
-    </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>
