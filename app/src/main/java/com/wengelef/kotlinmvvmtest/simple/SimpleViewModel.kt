@@ -3,7 +3,7 @@ package com.wengelef.kotlinmvvmtest.simple
 import android.databinding.Bindable
 import com.wengelef.kotlinmvvmtest.BR
 import com.wengelef.kotlinmvvmtest.LceViewModel
-import com.wengelef.kotlinmvvmtest.advanced.Response
+import com.wengelef.kotlinmvvmtest.advanced.state.Response
 import com.wengelef.kotlinmvvmtest.model.User
 import com.wengelef.kotlinmvvmtest.rest.repo.UserRepository
 import javax.inject.Inject

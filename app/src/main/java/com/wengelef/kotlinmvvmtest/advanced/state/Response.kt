@@ -1,4 +1,4 @@
-package com.wengelef.kotlinmvvmtest.advanced
+package com.wengelef.kotlinmvvmtest.advanced.state
 
 sealed class Response<T> : State<Response<T>> {
 

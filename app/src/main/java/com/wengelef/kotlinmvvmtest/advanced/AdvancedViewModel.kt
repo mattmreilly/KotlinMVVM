@@ -5,6 +5,9 @@ import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import com.wengelef.kotlinmvvmtest.BR
 import com.wengelef.kotlinmvvmtest.LceViewModel
+import com.wengelef.kotlinmvvmtest.advanced.state.AdvancedViewState
+import com.wengelef.kotlinmvvmtest.advanced.state.Response
+import com.wengelef.kotlinmvvmtest.advanced.state.State
 import com.wengelef.kotlinmvvmtest.model.User
 import com.wengelef.kotlinmvvmtest.rest.repo.UserRepository
 import com.wengelef.kotlinmvvmtest.util.ConnectionObserver

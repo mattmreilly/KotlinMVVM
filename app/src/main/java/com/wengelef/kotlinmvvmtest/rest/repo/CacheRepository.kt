@@ -1,6 +1,6 @@
 package com.wengelef.kotlinmvvmtest.rest.repo
 
-import com.wengelef.kotlinmvvmtest.advanced.Response
+import com.wengelef.kotlinmvvmtest.advanced.state.Response
 import com.wengelef.kotlinmvvmtest.extension.isNetworkException
 import com.wengelef.kotlinmvvmtest.util.ConnectionObserver
 import rx.Observable
