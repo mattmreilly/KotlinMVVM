@@ -25,6 +25,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 def supportLibVersion = '25.3.1'
