@@ -1,4 +1,4 @@
-# KotlinMVVM
+# KotlinMVVM [![Build Status](https://travis-ci.org/wengelef/KotlinMVVM.svg?branch=master)](https://travis-ci.org/wengelef/KotlinMVVM)
 
 [WIP]
 
