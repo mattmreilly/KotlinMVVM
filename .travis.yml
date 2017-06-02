@@ -34,3 +34,6 @@ licenses:
     - '.+'
 
 sudo: required
+
+script:
+    - ./gradlew assembleDebug
